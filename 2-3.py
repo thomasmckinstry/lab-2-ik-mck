@@ -6,7 +6,7 @@ from scipy.spatial import ConvexHull
 
 my_chain  = ikpy.chain.Chain.from_urdf_file("./ur5/ur5_gripper.urdf")
 
-num_samples = 1024 
+num_samples = 128 
 r = 2
 u = np.random.uniform(low=-r, high=r, size=(num_samples))
 theta = np.random.uniform(low=0, high=2*np.pi, size=(num_samples))
@@ -21,12 +21,19 @@ for i in range(num_samples):
     y = np.sqrt(np.square(r)-np.square(k)) * np.sin(j)
     z = k
     target = [x, y, z]
-    #print(target)
 
     end_pos = my_chain.forward_kinematics(my_chain.inverse_kinematics(target))
     end_points[i] = end_pos[:3,3]
 
 hull = ConvexHull(end_points)
+x = []
+y = []
+z = []
+
+for vertex in hull.vertices:
+    x.append(end_points[vertex, 0])
+    y.append(end_points[vertex, 1])
+    z.append(end_points[vertex, 2])
 
 fig, ax = plt.subplots(subplot_kw={'projection':'3d'})
 for simplex in hull.simplices:
