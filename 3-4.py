@@ -1,3 +1,4 @@
+from os.path import join
 import ikpy.chain
 import numpy as np
 import ikpy.utils.plot as plot_utils
@@ -8,10 +9,9 @@ my_chain  = ikpy.chain.Chain.from_urdf_file("./ur5/ur5_gripper.urdf")
 fig, ax = plot_utils.init_3d_figure()
 ax.set_box_aspect((1, 1, 1))
 
-target_position = [1, 0, 0]
+target_position = [0, 1, 0]
 real_frame = my_chain.forward_kinematics(my_chain.inverse_kinematics(target_position), full_kinematics=True)
 joint_positions = [x[:3, 3] for x in real_frame]
-#print(joint_positions)
 
 my_chain.plot(my_chain.inverse_kinematics(target_position), ax)
 
@@ -59,7 +59,7 @@ axes = [0, 1, 2]
 
 plane_vector = np.array([0.5, 2, 0])
 plane_vector = plane_vector / np.linalg.norm(plane_vector) # Get unit vector
-plane_point = [0, 0.5, 0] # Assume point is at 0 for all axes except for the main axis
+plane_point = [0, 0.5, 0] #TODO: For now only  works with offset in the main_axis
 
 main_axis = np.argmax(plane_vector)
 axes = list(filter(lambda x: x != main_axis, axes))
@@ -68,17 +68,34 @@ a = np.linspace(-1, 1, 10)
 b = np.linspace(-1, 1, 10) 
 a, b = np.meshgrid(a, b)
 #a += plane_point[axes[0]]
-print("A:", a, "B:", b)
 c = (a * (-plane_vector[axes[0]] * plane_vector[main_axis]) + b * (-plane_vector[axes[1]] / plane_vector[main_axis])) + plane_point[main_axis] # Slope along the x axis with a slope of 2
 
 meshes = [None] * 3
-#print(meshes)
 meshes[axes[0]] = a
 meshes[axes[1]] = b
 meshes[main_axis] = c
 
-#print(meshes)
 ax.quiver(plane_point[0], plane_point[1], plane_point[2], plane_vector[0], plane_vector[1], plane_vector[2], color="Green")
 ax.plot_surface(meshes[0], meshes[1], meshes[2], alpha=0.75)
 
+for i in range(len(joint_positions) - 1):
+#    print("A:", joint_positions[i], "B:", joint_positions[i + 1])
+    distance = np.abs(np.subtract(joint_positions[i], joint_positions[i+1]))
+    magnitude = np.linalg.norm(distance)
+#    print("Dist and Magnitude:", distance, magnitude)
+    unit = distance / magnitude
+    #print(unit)
+
+    intersect = np.dot(unit, plane_vector)
+    if intersect != 0:
+        d = (np.dot((plane_point - joint_positions[i]), plane_vector)) / intersect
+        collision = joint_positions[i] + unit * d
+        collision_dist_a = np.linalg.norm(np.abs(np.subtract(joint_positions[i], collision)))
+        collision_dist_b = np.linalg.norm(np.abs(np.subtract(joint_positions[i + 1], collision)))
+        #print("Collision a", collision_dist_a, "Collision b", collision_dist_b, magnitude)
+        if collision_dist_a <= magnitude and collision_dist_b <= magnitude:
+            print("Collision on joints", i, i+1)
+            ax.scatter(collision[0], collision[1], collision[2], color='red')
+            break
+#    print()
 plt.show()
