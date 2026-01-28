@@ -26,16 +26,8 @@ for i in range(num_samples):
     end_points[i] = end_pos[:3,3]
 
 hull = ConvexHull(end_points)
-x = []
-y = []
-z = []
 
-for vertex in hull.vertices:
-    x.append(end_points[vertex, 0])
-    y.append(end_points[vertex, 1])
-    z.append(end_points[vertex, 2])
-
-fig, ax = plt.subplots(subplot_kw={'projection':'3d'})
+fig, ax = plot_utils.init_3d_figure() 
 for simplex in hull.simplices:
     plt.plot(end_points[simplex, 0], end_points[simplex, 1], end_points[simplex, 2], 'k-')
 plt.show()
