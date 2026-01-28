@@ -1,2 +1,4 @@
 pixi.lock
 .ipynb_checkpoints
+*.aux
+*.log

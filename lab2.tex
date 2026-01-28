@@ -1,0 +1,115 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Lab 2},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\usepackage{mdframed}
+\usepackage{titlesec}
+
+\title{Lab 2}
+\author{}
+\date{}
+
+\titlespacing*{\subsection}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+
+\newmdenv[leftmargin=\dimexpr-0.5em-3pt, innerleftmargin=0.5em,
+          rightmargin=\dimexpr-0.5em-3pt, innerrightmargin=0.5em,
+          linewidth=0.5pt, topline=true, bottomline=true,
+          innertopmargin=5pt,innerbottommargin=5pt,skipbelow=5pt,skipabove=5pt,
+         ]{questionx}
+\newenvironment{question}
+ {\par\vskip\dimexpr\dp\strutbox-\prevdepth\relax\questionx\strut\ignorespaces}
+ {\par\xdef\notetpd{\the\prevdepth}\endquestionx\vskip-\notetpd\relax}
+
+\begin{document}
+\maketitle
+
+Total points: 100
+
+\hypertarget{part-1-urdf}{%
+\subsection{Part 1: URDF}\label{part-1-urdf}}
+
+\begin{question}
+  \textbf{1.} From the xacro file, can you determine the lengths of each link of the robot arm? What are the lengths? Given these, as well as the visualization of our robot arm in yourdfpy, what do you think the maximum range of the robot arm is (approximately)? Note that units are in meters.
+\end{question}
+  
+\hypertarget{part-2-inverse-kinematics}{%
+\subsection{Part 2: Inverse Kinematics}\label{part-2-inverse-kinematics}}
+
+\begin{question}
+  \textbf{2.} Can you get your robot end effector to the maximum range you estimated in Q1, along any of the x/y/z axes? Why or why not?
+ \end{question}
+
+\begin{question}
+  \textbf{2.} Write code to find and visualize the 3D volume of points that are reachable by the robot arm. Hints: the forward kinematics function gives you the actual position of the end effector for a given target position. The target position is visualized as a red dot in the original plotting code. You want to randomly sample from points on a large sphere around the robot, and attempt to get the robot to reach those points, such that the arm is fully "stretched". Record the resulting points, and visualize. You may want the "Convex Hull" method in the "scipy" library, as well as the method plot_trisurf from the matplotlib library. AI is allowed for producing the visualization code, but not for sampling from the sphere. Sampling points on the surface of a sphere is a non-trivial problem.
+ \end{question}
+
+\hypertarget{part-3-collision-checking}{%
+\subsection{Part 3: Collision Checking}\label{part-3-collision-checking}}
+
+\begin{question}
+  \textbf{4.} Define and visualize a plane in the space with the robot arm; the plane should not intersect the robot arm when all the joints are set to zero position. Write code to determine if any part of the robot arm is intersecting the plane for an arbitrary pose of the robot arm, and include at least three test cases for your method.
+\end{question}
+
+\end{document}
