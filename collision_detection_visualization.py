@@ -17,9 +17,9 @@ my_chain.plot(my_chain.inverse_kinematics(target_position), ax)
 
 axes = [0, 1, 2]
 
-plane_vector = np.array([0.5, 2, 0])
+plane_vector = np.array([0.5, 2, 3])
 plane_vector = plane_vector / np.linalg.norm(plane_vector) # Get unit vector
-plane_point = [0, 0.5, 0] #TODO: For now only  works with offset in the main_axis
+plane_point = [0, 0, 0.25] #TODO: For now only  works with offset in the main_axis
 
 main_axis = np.argmax(plane_vector)
 axes = list(filter(lambda x: x != main_axis, axes))
@@ -34,7 +34,7 @@ meshes[axes[0]] = a
 meshes[axes[1]] = b
 meshes[main_axis] = c
 
-ax.quiver(plane_point[0], plane_point[1], plane_point[2], plane_vector[0], plane_vector[1], plane_vector[2], color="Green")
+#ax.quiver(plane_point[0], plane_point[1], plane_point[2], plane_vector[0], plane_vector[1], plane_vector[2], color="Green")
 ax.plot_surface(meshes[0], meshes[1], meshes[2], alpha=0.75)
 
 for i in range(len(joint_positions) - 1):
@@ -52,4 +52,5 @@ for i in range(len(joint_positions) - 1):
             print("Collision on joints", i, i+1)
             ax.scatter(collision[0], collision[1], collision[2], color='red')
             break
+    # TODO: Deal with case where line is parralel to and contained within plane
 plt.show()
