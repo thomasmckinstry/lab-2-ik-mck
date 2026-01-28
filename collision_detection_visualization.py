@@ -53,4 +53,5 @@ for i in range(len(joint_positions) - 1):
             ax.scatter(collision[0], collision[1], collision[2], color='red')
             break
     # TODO: Deal with case where line is parralel to and contained within plane
+    # For a segment to be parralel to and contained within the plane, some other segment must not be parralel to and contained within the plane, and have a joint that is positioned on the plane, so not including this case should be fine.
 plt.show()
