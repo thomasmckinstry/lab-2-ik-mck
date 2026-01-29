@@ -5,29 +5,25 @@ import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull
 
 my_chain  = ikpy.chain.Chain.from_urdf_file("./ur5/ur5_gripper.urdf")
-
 num_samples = 128 
 r = 2
 u = np.random.uniform(low=-r, high=r, size=(num_samples))
 theta = np.random.uniform(low=0, high=2*np.pi, size=(num_samples))
-
 end_points = np.empty((num_samples, 3))
 
 for i in range(num_samples):
     k = u[i]
     j = theta[i]
-
     x = np.sqrt(np.square(r)-np.square(k)) * np.cos(j)
     y = np.sqrt(np.square(r)-np.square(k)) * np.sin(j)
     z = k
     target = [x, y, z]
-
     end_pos = my_chain.forward_kinematics(my_chain.inverse_kinematics(target))
-    end_points[i] = end_pos[:3,3]
+    end_points[i] = end_pos[:3,3] # Gets pos. of end effector
 
 hull = ConvexHull(end_points)
-
 fig, ax = plot_utils.init_3d_figure() 
-for simplex in hull.simplices:
+ax.set_box_aspect((1, 1, 1))
+for simplex in hull.simplices: # https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
     plt.plot(end_points[simplex, 0], end_points[simplex, 1], end_points[simplex, 2], 'k-')
 plt.show()
