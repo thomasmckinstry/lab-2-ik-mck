@@ -48,7 +48,7 @@ def collision_detection(plane_vector, plane_point, target_position):
             if collision_dist_a <= magnitude and collision_dist_b <= magnitude:
                 print("Collision on joints", i, i+1)
                 ax.scatter(collision[0], collision[1], collision[2], color='red')
-                break
+                return True
     plt.show()
 
 collision_detection([0.5,0.5,0.75],[0,0,0.5],[-0.5,0,0.25])
